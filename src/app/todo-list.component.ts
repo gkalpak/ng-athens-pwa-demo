@@ -1,3 +1,4 @@
+import {HttpClient} from '@angular/common/http';
 import {Component, OnInit} from '@angular/core';
 import {ITodoItem} from './todo-item.component';
 
@@ -28,15 +29,19 @@ import {ITodoItem} from './todo-item.component';
 export class TodoListComponent implements OnInit {
   items: ITodoItem[] = [];
 
+  constructor(private http: HttpClient) {
+  }
+
   ngOnInit(): void {
-    this.items = [
-      {id: 1, completed: false, description: 'Do something'},
-      {id: 2, completed: false, description: 'Do something else'},
-      {id: 3, completed: false, description: 'Do another thing'}
-    ];
+    this.http.
+      get<ITodoItem[]>('/api/todos').
+      subscribe(items => this.items = items, console.error);
   }
 
   onCompletedChange(item: ITodoItem, completed: boolean): void {
     item.completed = completed;
+    this.http.
+      put<ITodoItem>(`/api/todos/${item.id}`, item).
+      subscribe(null, console.error);
   }
 }
