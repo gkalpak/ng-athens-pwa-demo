@@ -8,7 +8,10 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "serve-api": "json-server mock-api/db.js --delay=5000 --routes=mock-api/routes.conf.json"
+    "serve-api": "json-server mock-api/db.js --delay=5000 --routes=mock-api/routes.conf.json",
+    "serve-pwa": "run-s \"build -- --prod\" \"serve-api -- --static=dist/pwa-demo/\"",
+    "//cheat": "Only build the SW config and serve. (Useful when app code has not changed since last build.)",
+    "~~cheat": "ngsw-config dist/pwa-demo/ ngsw-config.json && npm run serve-api -- --static=dist/pwa-demo/"
   },
   "private": true,
   "dependencies": {
