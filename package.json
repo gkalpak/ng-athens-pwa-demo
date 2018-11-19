@@ -8,7 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "serve-api": "json-server mock-api/db.js --routes=mock-api/routes.conf.json"
+    "serve-api": "json-server mock-api/db.js --delay=5000 --routes=mock-api/routes.conf.json"
   },
   "private": true,
   "dependencies": {

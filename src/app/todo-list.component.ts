@@ -1,5 +1,6 @@
 import {HttpClient} from '@angular/common/http';
 import {Component, OnInit} from '@angular/core';
+import {tap} from 'rxjs/operators';
 import {ITodoItem} from './todo-item.component';
 
 
@@ -7,6 +8,10 @@ import {ITodoItem} from './todo-item.component';
   selector: 'app-todo-list',
   template: `
     <h2>TODOs</h2>
+    <div>
+      <button (click)="fetchTodoItems()" [disabled]="fetching">Refresh</button>
+      <span *ngIf="fetching"> Fetching TODO items...</span>
+    </div>
     <ul>
       <li *ngFor="let item of items">
         <app-todo-item
@@ -28,13 +33,22 @@ import {ITodoItem} from './todo-item.component';
 })
 export class TodoListComponent implements OnInit {
   items: ITodoItem[] = [];
+  fetching = false;
 
   constructor(private http: HttpClient) {
   }
 
   ngOnInit(): void {
+    this.fetchTodoItems();
+  }
+
+  fetchTodoItems(): void {
+    this.items = [];
+    this.fetching = true;
+
     this.http.
       get<ITodoItem[]>('/api/todos').
+      pipe(tap(() => this.fetching = false)).
       subscribe(items => this.items = items, console.error);
   }
 
